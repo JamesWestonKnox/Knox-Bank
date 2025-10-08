@@ -11,3 +11,4 @@ const Transaction = {
 };
 
 module.exports = Transaction;
+
