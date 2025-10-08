@@ -4,7 +4,7 @@ const Customer = {
   idNumber: String,
   accountNumber: String,
   passwordHash: String,
-  createdAt: Date,
+  createdAt: Date
 };
 
 module.exports = Customer;
