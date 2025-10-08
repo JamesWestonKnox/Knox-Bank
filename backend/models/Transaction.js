@@ -1,14 +1,13 @@
-const Transaction = {
-  id: Number,
-  customerId: Number,
-  amount: Number,
-  currency: String,
-  provider: String,
-  payeeAccount: String,
-  swift: String,
-  status: "PENDING",
-  createdAt: Date,
-};
+const mongoose = require("mongoose");
 
-module.exports = Transaction;
+const TransactionSchema = new mongoose.Schema({
+  customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: true },
+  amount: { type: Number, required: true },
+  currency: { type: String, required: true },
+  provider: { type: String, required: true },
+  payeeAccount: { type: String, required: true },
+  swift: { type: String, required: true },
+  status: { type: String, default: "PENDING" },
+}, { timestamps: true });
 
+module.exports = mongoose.model("Transaction", TransactionSchema);
