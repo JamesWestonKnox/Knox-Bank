@@ -15,7 +15,7 @@ export default function RegistrationForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Regex patterns for input validation
-  const nameReg = /^[a-zA-z]{3,30}$/
+  const nameReg = /^[a-zA-Z]{3,30}$/
   const idReg = /^[0-9]{13}$/
   const accReg = /^[0-9]{10,12}$/
   const passwordReg = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
@@ -83,7 +83,7 @@ export default function RegistrationForm() {
   // Layout of registration success message
   const successMessageDisplay = () => (
     <div style={{ display: isRegistered ? "" : "none", color: "green" }}>
-      <h1>Customer {fullName} successfully registered!</h1>
+      <h1>Successfully registered!</h1>
     </div>
   );
 
