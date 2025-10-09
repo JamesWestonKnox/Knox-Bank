@@ -24,3 +24,10 @@ export async function loginCustomer(credentials) {
   return await res.json();
 }
 
+export const getTransactions = async (token) => {
+  return await API.get("/transaction", { headers: { Authorization: `Bearer ${token}` } });
+};
+
+export const createTransaction = async (data, token) => {
+  return await API.post("/transaction", data, { headers: { Authorization: `Bearer ${token}` } });
+};

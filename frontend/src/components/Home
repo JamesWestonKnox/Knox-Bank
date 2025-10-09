@@ -1,0 +1,160 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+export default function Home() {
+  const [amount, setAmount] = useState("");
+  const [currency, setCurrency] = useState("ZAR");
+  const [provider, setProvider] = useState("FNB");
+  const [payeeAccount, setPayeeAccount] = useState("");
+  const [swift, setSwift] = useState("");
+
+  const [transactions, setTransactions] = useState([]);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const token = localStorage.getItem("token");
+
+  // Axios instance with JWT token
+  const API = axios.create({
+    baseURL: "https://localhost:4000/api/transaction",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  // Fetch transactions when component mounts
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const res = await API.get("/");
+        setTransactions(res.data.transactions);
+      } catch (err) {
+        setError(err.response?.data?.error || "Failed to fetch transactions");
+      }
+    };
+    fetchTransactions();
+  }, []);
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setMessage("");
+  setError("");
+
+  // Regex patterns
+  const accountReg = /^[0-9]{10,12}$/;
+  const swiftReg = /^[A-Za-z0-9]{8,11}$/;
+
+  if (!amount || !payeeAccount || !swift) {
+    setError("Please fill out all fields");
+    return;
+  }
+
+  if (isNaN(amount) || parseFloat(amount) <= 0) {
+    setError("Amount must be a number greater than 0");
+    return;
+  }
+
+  if (!accountReg.test(payeeAccount)) {
+    setError("Payee account must be 10–12 digits");
+    return;
+  }
+
+  if (!swiftReg.test(swift)) {
+    setError("SWIFT code must be 8–11 alphanumeric characters");
+    return;
+  }
+
+  try {
+    const res = await API.post("/", { amount, currency, provider, payeeAccount, swift });
+    setTransactions([res.data.transaction, ...transactions]);
+    setMessage("Transaction created successfully!");
+
+    // Clear form
+    setAmount("");
+    setPayeeAccount("");
+    setSwift("");
+    setCurrency("ZAR");
+    setProvider("FNB");
+  } catch (err) {
+    setError(err.response?.data?.error || "Failed to create transaction");
+  }
+};
+
+
+  return (
+    <div style={{ maxWidth: 600, margin: "50px auto", textAlign: "center" }}>
+      <h1>Welcome to Your Home Page</h1>
+
+      {message && <div style={{ color: "green" }}>{message}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: 30 }}>
+        <div>
+          <label>Amount</label>
+          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+        </div>
+
+        <div>
+          <label>Currency</label>
+          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+            <option value="ZAR">ZAR</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Provider</label>
+          <select value={provider} onChange={(e) => setProvider(e.target.value)}>
+            <option value="FNB">FNB</option>
+            <option value="ABSA">ABSA</option>
+            <option value="Capitec">Capitec</option>
+            <option value="Standard Bank">Standard Bank</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Payee Account</label>
+          <input type="text" value={payeeAccount} onChange={(e) => setPayeeAccount(e.target.value)} />
+        </div>
+
+        <div>
+          <label>SWIFT Code</label>
+          <input type="text" value={swift} onChange={(e) => setSwift(e.target.value)} />
+        </div>
+
+        <button type="submit" style={{ marginTop: 10 }}>Create Transaction</button>
+      </form>
+
+      <h2>Your Transactions</h2>
+      {transactions.length === 0 ? (
+        <p>No transactions yet.</p>
+      ) : (
+        <table border="1" style={{ width: "100%", textAlign: "center" }}>
+          <thead>
+            <tr>
+              <th>Amount</th>
+              <th>Currency</th>
+              <th>Provider</th>
+              <th>Payee Account</th>
+              <th>SWIFT</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((t) => (
+              <tr key={t._id}>
+                <td>{t.amount}</td>
+                <td>{t.currency}</td>
+                <td>{t.provider}</td>
+                <td>{t.payeeAccount}</td>
+                <td>{t.swift}</td>
+                <td>{t.status}</td>
+                <td>{new Date(t.createdAt).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
