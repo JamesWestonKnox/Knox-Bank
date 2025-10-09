@@ -1,107 +1,123 @@
 import { useState } from "react";
 import { registerCustomer } from "../services/api";
 
-const Register = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    idNumber: "",
-    accountNumber: "",
-    password: "",
-    email: "",
-});
+export default function RegistrationForm() {
 
-const [message, setMessage] = useState("");
+  // Registration form field states
+  const [fullname, setFullName] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [password, setPassword] = useState("");
 
-const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-};
+  // States for form submission and error feedback
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-const validateInput = () => {
-    const nameRegex = /^[a-zA-Z ]{3,50}$/;
-    const idRegex = /^[0-9]{13}$/;
-    const accRegex = /^[0-9]{10,12}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passRegex = /^.{6,}$/;
+  // Regex patterns for input validation
+  const nameReg = /^[a-zA-z]{3,30}$/
+  const idReg = /^[0-9]{13}$/
+  const accReg = /^[0-9]{10,12}$/
+  const passwordReg = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
-    if (!nameRegex.test(formData.fullName)) return "Invalid full name";
-    if (!idRegex.test(formData.idNumber)) return "Invalid ID number";
-    if (!accRegex.test(formData.accountNumber)) return "Invalid account number";
-    if (!emailRegex.test(formData.email)) return "Invalid email";
-    if (!passRegex.test(formData.password)) return "Password too short";
-    return null;
-};
+  // Handlers for fields on input event
+  const handleFullName = (input) => {setFullName(input.target.value)};
+  const handleIdNumber = (input) => {setIdNumber(input.target.value)};
+  const handleAccountNumber = (input) => {setAccountNumber(input.target.value)};
+  const handlePassword = (input) => {setPassword(input.target.value)};
 
-const handleSubmit = async (e) => {
+  // Function to handle form submission
+  const handleFormSubmit = async (e) => {
+
+    // Ensures form does not refresh and lose state
     e.preventDefault();
-    const error = validateInput();
-    if (error) {
-      setMessage(error);
+
+    // Checks if all fields are filled out, else returns error message
+    if (!fullname || !idNumber || !accountNumber || !password){
+      setError(true);
+      setErrorMessage("All fields must be filled out");
+      setIsRegistered(false);
       return;
     }
 
-    try {
-      const res = await registerCustomer(formData);
-      setMessage(res.data.message || "Registration successful!");
-      setFormData({ fullName: "", idNumber: "", accountNumber: "", password: "", email: "" });
-    } catch (err) {
-      setMessage(err.response?.data?.error || "Registration failed");
+    // Tests inputs against Regex patterns and returns error messages
+    if (!nameReg.test(fullname)) {
+      setError(true);
+      setErrorMessage("Full name must be between 3 - 30 letters");
+      return;
     }
-};
+    if (!idReg.test(idNumber)) {
+      setError(true);
+      setErrorMessage("ID number must be 13 digits long");
+      return;
+    }
+    if (!accReg.test(accountNumber)) {
+      setError(true);
+      setErrorMessage("Account number must be between 10-12 digits long");
+      return;
+    }
+    if (!passwordReg.test(password)) {
+      setError(true);
+      setErrorMessage("Password must contain 8 characters, including 1 Capital letter, 1 special character and 1 number");
+      return;
+    }
 
-return (
-    <div style={{ maxWidth: "400px", margin: "50px auto" }}>
-      <h2>Customer Registration</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="fullName"
-          placeholder="Full Name"
-          value={formData.fullName}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <input
-          type="text"
-          name="idNumber"
-          placeholder="ID Number"
-          value={formData.idNumber}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <input
-          type="text"
-          name="accountNumber"
-          placeholder="Account Number"
-          value={formData.accountNumber}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <button type="submit">Register</button>
+    // If validations pass, registers and clears form fields
+    try {
+      await registerCustomer({fullname, idNumber, accountNumber, password});
+      setSubmitted(true);
+      setError(false);
+      setErrorMessage("");
+
+      setFullName("");
+      setIdNumber("");
+      setAccountNumber("");
+      setPassword("");
+    } catch (error) {
+      setError(true);
+      setSubmitted(false);
+      setErrorMessage("Registration failed");
+    }
+  };
+
+  // Layout of registration success message
+  const successMessageDisplay = () => (
+    <div style={{ display: submitted ? "" : "none", color: "green" }}>
+      <h1>Customer {fullName} successfully registered!</h1>
+    </div>
+  );
+
+  // Layout of error message
+  const errorMessageDisplay = () => (
+    <div style={{ display: error ? "" : "none", color: "red" }}>
+      <h1>{errorMessage}</h1>
+    </div>
+  );
+
+  // Form HTML layout
+  return (
+    <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
+      <h1>Customer Registration</h1>
+
+      {errorMessageDisplay()}
+      {successMessageDisplay()}
+
+      <form>
+        <label>Full Name</label>
+        <input type="text" value={fullName} onChange={handleFullName} />
+
+        <label>ID Number</label>
+        <input type="text" value={idNumber} onChange={handleIdNumber} />
+
+        <label>Account Number</label>
+        <input type="text" value={accountNumber} onChange={handleAccountNumber} />
+
+        <label>Password</label>
+        <input type="password" value={password} onChange={handlePassword} />
+
+        <button type="submit" onClick={handleFormSubmit}>Register</button>
       </form>
     </div>
   );
-};
+}
 
-export default Register;
