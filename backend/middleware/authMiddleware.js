@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+//Checking if user is logged in to protect routes
 const authMiddleware = (req, res, next) => {
+
 
   try {
     const authHeader = req.headers["authorization"];
