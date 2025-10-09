@@ -4,7 +4,7 @@ import { registerCustomer } from "../services/api";
 export default function RegistrationForm() {
 
   // Registration form field states
-  const [fullname, setFullName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +33,7 @@ export default function RegistrationForm() {
     e.preventDefault();
 
     // Checks if all fields are filled out, else returns error message
-    if (!fullname || !idNumber || !accountNumber || !password){
+    if (!fullName || !idNumber || !accountNumber || !password){
       setError(true);
       setErrorMessage("All fields must be filled out");
       setIsRegistered(false);
@@ -41,7 +41,7 @@ export default function RegistrationForm() {
     }
 
     // Tests inputs against Regex patterns and returns error messages
-    if (!nameReg.test(fullname)) {
+    if (!nameReg.test(fullName)) {
       setError(true);
       setErrorMessage("Full name must be between 3 - 30 letters");
       return;
@@ -64,8 +64,8 @@ export default function RegistrationForm() {
 
     // If validations pass, registers and clears form fields
     try {
-      await registerCustomer({fullname, idNumber, accountNumber, password});
-      setSubmitted(true);
+      await registerCustomer({fullName, idNumber, accountNumber, password});
+      setIsRegistered(true);
       setError(false);
       setErrorMessage("");
 
@@ -75,14 +75,14 @@ export default function RegistrationForm() {
       setPassword("");
     } catch (error) {
       setError(true);
-      setSubmitted(false);
+      setIsRegistered(false);
       setErrorMessage("Registration failed");
     }
   };
 
   // Layout of registration success message
   const successMessageDisplay = () => (
-    <div style={{ display: submitted ? "" : "none", color: "green" }}>
+    <div style={{ display: isRegistered ? "" : "none", color: "green" }}>
       <h1>Customer {fullName} successfully registered!</h1>
     </div>
   );
