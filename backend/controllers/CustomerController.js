@@ -1,9 +1,9 @@
-const Customer = require("../models/Customer");
-const bcrypt = require("bcrypt");
-const { body, validationResult } = require("express-validator");
+import Customer from "../models/Customer.js";
+import bcrypt from "bcrypt";
+import { body, validationResult } from "express-validator";
 
 //Input validation ensuring that the data matches the certain validation rules before registering the user
-const register = async (req, res) => {
+export const register = async (req, res) => {
   //Full name must be minimum 3 characters long
   await body("fullName").isLength({ min: 3 }).withMessage("Full name must be atleast 3 characters").run(req);
   //ID number must be 13 digits long
@@ -41,5 +41,3 @@ const register = async (req, res) => {
     res.status(500).json({ error: "Server error: " + err.message });
   }
 };
-
-module.exports = { register };
