@@ -5,13 +5,13 @@ const { body, validationResult } = require("express-validator");
 //Input validation ensuring that the data matches the certain validation rules before registering the user
 const register = async (req, res) => {
   //Full name must be minimum 3 characters long
-  await body("fullName").isLength({ min: 3 }).run(req);
+  await body("fullName").isLength({ min: 3 }).withMessage("Full name must be atleast 3 characters").run(req);
   //ID number must be 13 digits long
-  await body("idNumber").isNumeric().isLength({ min: 13, max: 13 }).run(req);
+  await body("idNumber").isNumeric().isLength({ min: 13, max: 13 }).withMessage("ID number must be 13 digits").run(req);
   //Account number must be numerical and be between 10 and 12 numbers long
-  await body("accountNumber").isNumeric().isLength({ min: 10, max: 12 }).run(req);
+  await body("accountNumber").isNumeric().isLength({ min: 10, max: 12 }).withMessage("Account number must be between 10 to 12 digits").run(req);
   //Password must contain 8 characters, including 1 Capital letter, 1 special character and 1 number
-  await body("password").isLength({ min: 8 }).matches(/\d/).matches(/[A-Z]/).matches(/[!@#$%^&*(),.?":{}|<>]/).run(req); 
+  await body("password").isLength({ min: 8 }).withMessage("Password must be atleast 8 characters").matches(/\d/).withMessage("Password must contain 1 number").matches(/[A-Z]/).withMessage("Password must contain 1 Uppercase character").matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage("Password must contain 1 special character").run(req); 
 
   //Checking for validation errors
   const errors = validationResult(req);
@@ -34,7 +34,7 @@ const register = async (req, res) => {
     //Saving the customer to the database
     await newCustomer.save();
     
-    //Sending a success message
+    //Sending a success message to form
     res.status(201).json({ customer: { id: newCustomer._id, fullName, accountNumber } });
   } catch (err) {
     //Error message
