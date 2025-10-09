@@ -116,6 +116,13 @@ export default function RegistrationForm() {
         <input type="password" value={password} onChange={handlePassword} />
 
         <button type="submit" onClick={handleFormSubmit}>Register</button>
+
+        <button
+          type="button" // <- this is the key
+          onClick={() => window.location.href = "/login"}
+        > Already have an account? Login
+        </button>
+
       </form>
     </div>
   );

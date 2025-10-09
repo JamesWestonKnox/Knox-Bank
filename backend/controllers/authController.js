@@ -1,4 +1,4 @@
-import Customer from "../models/Customer";
+import Customer from "../models/Customer.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
@@ -29,7 +29,7 @@ export const login = async (req, res) => {
 
     //Creating a jwt token to keep the user logged in
     const token = jwt.sign(
-      { id: customer._id, role: "customer" },
+      { id: customer._id, fullName: customer.fullName, accountNumber : customer.accountNumber},
       process.env.JWT_SECRET,
       { expiresIn: "15m" } //jwt token only lasts for 15 minutes
     );
