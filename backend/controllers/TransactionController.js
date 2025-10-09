@@ -1,5 +1,6 @@
-const Transaction = require("../models/Transaction");
-const { body, validationResult } = require("express-validator");
+import { body, validationResult } from "express-validator";
+import Transaction from "../models/Transaction.js";
+import bcrypt from "bcrypt";
 
 //Method to create a new transaction
 const createTransaction = async (req, res) => {
@@ -52,4 +53,4 @@ const getTransactions = async (req, res) => {
   }
 };
 
-module.exports = { createTransaction, getTransactions };
+export { createTransaction, getTransactions };
