@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { registerCustomer } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function RegistrationForm() {
 
+  const navigate = useNavigate();
   // Registration form field states
   const [fullName, setFullName] = useState("");
   const [idNumber, setIdNumber] = useState("");
@@ -117,11 +119,9 @@ export default function RegistrationForm() {
 
         <button type="submit" onClick={handleFormSubmit}>Register</button>
 
-        <button
-          type="button" // <- this is the key
-          onClick={() => window.location.href = "/login"}
-        > Already have an account? Login
-        </button>
+        <button type="button" onClick={() => navigate("/login")}>
+        Already have an account? Login
+      </button>
 
       </form>
     </div>
