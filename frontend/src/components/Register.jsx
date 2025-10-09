@@ -15,7 +15,7 @@ export default function RegistrationForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Regex patterns for input validation
-  const nameReg = /^[a-zA-Z]{3,30}$/
+  const nameReg = /^[a-zA-Z ]{3,30}$/
   const idReg = /^[0-9]{13}$/
   const accReg = /^[0-9]{10,12}$/
   const passwordReg = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
