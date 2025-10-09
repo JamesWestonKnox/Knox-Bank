@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const TransactionSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: true },
@@ -10,4 +10,4 @@ const TransactionSchema = new mongoose.Schema({
   status: { type: String, default: "PENDING" },
 }, { timestamps: true });
 
-module.exports = mongoose.model("Transaction", TransactionSchema);
+export default mongoose.model("Transaction", TransactionSchema);
