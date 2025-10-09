@@ -91,7 +91,12 @@ export default function LoginForm() {
           onChange={handlePassword}
         />
 
-        <button type="submit">Login</button>
+        <button 
+        type="submit"
+        onClick={() => navigate("/home")}
+        >
+          Login  
+        </button>
 
         <button
           type="button"
