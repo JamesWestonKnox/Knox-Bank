@@ -6,5 +6,5 @@ const API = axios.create({
 });
 
 export const registerCustomer = async (data) => {
-  return await API.post("/auth/register", data);
+  return await API.post("customer/register", data);
 };

@@ -20,9 +20,9 @@ app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
+app.use("/api/customer", customerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
-app.use("/api/customer", customerRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
