@@ -1,6 +1,8 @@
 import express from "express";
+import https from "https";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import fs from "fs";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
@@ -12,8 +14,19 @@ import customerRoutes from "./routes/customerRoutes.js";
 dotenv.config();
 connectDB();
 
+const PORT = process.env.PORT || 4000;
 const app = express();
+const options = {
+    key: fs.readFileSync('keys/privatekey.pem'),
+    cert: fs.readFileSync('keys/certificate.pem')
+}
 
+app.use((req,res,next)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers','*');
+    res.setHeader('Access-Control-Allow-Methods','*');
+    next();
+})
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
@@ -24,5 +37,6 @@ app.use("/api/customer", customerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
 
-const PORT = process.env.PORT || 4000;
+let server = https.createServer(options,app);
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
