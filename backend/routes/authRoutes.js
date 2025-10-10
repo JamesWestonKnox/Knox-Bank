@@ -1,3 +1,13 @@
+/**
+ * authRoutes.js
+ * 
+ * Defines routes for authentication
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import express from "express";
 import { login } from "../controllers/authController.js";
 import ExpressBrute from "express-brute";
@@ -14,3 +24,5 @@ router.get("/", (req, res) => {
 });
 
 export default router;
+
+// =============================== END OF FILE ===============================
