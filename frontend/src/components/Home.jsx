@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { getTransactions, createTransaction } from "../services/api";
 import "./CustomStyling.css";
-import logo from "../assets/logo.png";
 
 export default function Home() {
   //Retrieving the input values from the user

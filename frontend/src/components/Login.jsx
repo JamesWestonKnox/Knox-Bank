@@ -58,6 +58,7 @@ export default function LoginForm() {
       setIsLoggedIn(true);
       setError(false);
       setErrorMessage("");
+      navigate("/home");
 
       // Clear fields
       setAccountNumber("");
@@ -101,13 +102,10 @@ export default function LoginForm() {
             />
           </div>
 
-         <button 
-        type="submit"
-        className="btn-primary"
-        onClick={() => navigate("/home")}
-        >
-        Login  
-        </button>
+         <button type="submit" className="btn-primary">
+          Login  
+          </button>
+
 
           <button
             type="button"
