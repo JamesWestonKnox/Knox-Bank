@@ -12,26 +12,40 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 
 dotenv.config();
+
+// Connect to MongoDb
 connectDB();
 
+// Sets server port and initialize express app
 const PORT = process.env.PORT || 4000;
 const app = express();
 
+// Key and certificate for HTTPS server
 const options = {
     key: fs.readFileSync('keys/privatekey.pem'),
     cert: fs.readFileSync('keys/certificate.pem')
 }
 
+// Helmet used for HTTP security headers
 app.use(helmet());
+
+// Parsing incoming JSON
 app.use(express.json());
+
+// Parsing cookies
 app.use(cookieParser());
 app.use(cors({ origin: "https://localhost:5173", credentials: true }));
+
+// Rate limiting
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
+// Setup routing on server
 app.use("/api/customer", customerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
 
+// Create HTTPS server with SSL keys
 let server = https.createServer(options,app);
 
+// Start server
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

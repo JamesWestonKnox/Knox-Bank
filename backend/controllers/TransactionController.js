@@ -28,8 +28,10 @@ export const createTransaction = async (req, res) => {
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
+    
     //Getting data from the body
     const { amount, currency, provider, payeeAccount, swift } = req.body;
+    
     //Creating a new transaction object with the data
     const transaction = new Transaction({
       customer: req.user.id,
@@ -39,6 +41,7 @@ export const createTransaction = async (req, res) => {
       payeeAccount,
       swift,
     });
+    
     //Saving it to the database
     await transaction.save();
 
@@ -51,6 +54,7 @@ export const createTransaction = async (req, res) => {
 //Method to get all transactions
 export const getTransactions = async (req, res) => {
   try {
+    
     //Retrieving all transactions related to the customer and sorting it newest first
     const transactions = await Transaction.find({ customer: req.user.id }).sort({ createdAt: -1 });
     res.json({ transactions });
