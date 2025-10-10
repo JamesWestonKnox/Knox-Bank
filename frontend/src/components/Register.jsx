@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { registerCustomer } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import "./Register.css";
+import "./CustomStyling.css";
 import logo from "../assets/logo.png";
 
 export default function RegistrationForm() {
@@ -102,18 +102,15 @@ export default function RegistrationForm() {
    return (
     <div className="register-container">
       <div className="register-card">
-        {/* Logo */}
         <img src={logo} alt="Knox Bank" className="register-logo" />
 
         <h1 className="register-title">Customer Registration</h1>
 
-        {/* Messages */}
         {error && <div className="error-message">{errorMessage}</div>}
         {isRegistered && (
           <div className="success-message">Successfully registered!</div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleFormSubmit}>
           <div className="form-group">
             <label>Full Name</label>

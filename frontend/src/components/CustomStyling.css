@@ -93,3 +93,77 @@
   color: #27ae60;
   margin-bottom: 15px;
 }
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px 20px;
+  background: linear-gradient(135deg, #1a3c6f, #4a90e2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+.home-title {
+  font-size: 4rem;
+  color: white;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.home-columns {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1500px;
+}
+
+.home-form-card {
+  flex: 0 0 400px;
+  background: white;
+  padding:40px;
+  align-items:center ;
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.home-table-card {
+  flex: 1;
+  min-width: 500px;
+  max-width: 900px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+  overflow-x: auto;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.transaction-table th, .transaction-table td {
+  border: 1px solid Black;
+  padding: 12px;
+  text-align: center;
+}
+
+.transaction-table th {
+  background-color: #2980b9;
+  color: white;
+}
+
+.transaction-table tr:nth-child(even) {
+  background-color: #f4f6f8;
+}
+
+.transaction-table tr:hover {
+  background-color: #e1ecf7;
+}
