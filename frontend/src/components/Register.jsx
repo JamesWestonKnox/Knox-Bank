@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { registerCustomer } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import "./Register.css";
+import logo from "../assets/logo.png";
 
 export default function RegistrationForm() {
 
@@ -97,33 +99,63 @@ export default function RegistrationForm() {
   );
 
   // Form HTML layout
-  return (
-    <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
-      <h1>Customer Registration</h1>
+   return (
+    <div className="register-container">
+      <div className="register-card">
+        {/* Logo */}
+        <img src={logo} alt="Knox Bank" className="register-logo" />
 
-      {errorMessageDisplay()}
-      {successMessageDisplay()}
+        <h1 className="register-title">Customer Registration</h1>
 
-      <form>
-        <label>Full Name</label>
-        <input type="text" value={fullName} onChange={handleFullName} />
+        {/* Messages */}
+        {error && <div className="error-message">{errorMessage}</div>}
+        {isRegistered && (
+          <div className="success-message">Successfully registered!</div>
+        )}
 
-        <label>ID Number</label>
-        <input type="text" value={idNumber} onChange={handleIdNumber} />
+        {/* Form */}
+        <form onSubmit={handleFormSubmit}>
+          <div className="form-group">
+            <label>Full Name</label>
+            <input type="text" value={fullName} onChange={handleFullName} />
+          </div>
 
-        <label>Account Number</label>
-        <input type="text" value={accountNumber} onChange={handleAccountNumber} />
+          <div className="form-group">
+            <label>ID Number</label>
+            <input type="text" value={idNumber} onChange={handleIdNumber} />
+          </div>
 
-        <label>Password</label>
-        <input type="password" value={password} onChange={handlePassword} />
+          <div className="form-group">
+            <label>Account Number</label>
+            <input
+              type="text"
+              value={accountNumber}
+              onChange={handleAccountNumber}
+            />
+          </div>
 
-        <button type="submit" onClick={handleFormSubmit}>Register</button>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={handlePassword}
+            />
+          </div>
 
-        <button type="button" onClick={() => navigate("/login")}>
-        Already have an account? Login
-      </button>
+          <button type="submit" className="btn-primary">
+            Register
+          </button>
 
-      </form>
+          <button
+            type="button"
+            className="btn-link"
+            onClick={() => navigate("/login")}
+          >
+            Already have an account? Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
