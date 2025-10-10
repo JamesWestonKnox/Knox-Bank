@@ -49,8 +49,15 @@ export const login = async (req, res) => {
       { expiresIn: "15m" } //jwt token only lasts for 15 minutes
     );
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 15 * 60 * 1000, 
+    });
+
     //Success response
-    res.json({ token, user: { id: customer._id, fullName: customer.fullName, accountNumber } });
+    res.json({ user: { id: customer._id, fullName: customer.fullName, accountNumber } });
   } catch (err) {
     
     //Error response if errors occur
