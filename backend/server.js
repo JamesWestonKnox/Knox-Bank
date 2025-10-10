@@ -1,3 +1,13 @@
+/**
+ * server.js
+ * 
+ * This file is used to setup the backend Express server.
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import express from "express";
 import https from "https";
 import dotenv from "dotenv";
@@ -49,3 +59,5 @@ let server = https.createServer(options,app);
 
 // Start server
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// =============================== END OF FILE ===============================

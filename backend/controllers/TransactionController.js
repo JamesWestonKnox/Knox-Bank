@@ -1,3 +1,13 @@
+/**
+ * transactionController.js
+ * 
+ * This file handles the validation and creation of new transactions
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import Transaction from "../models/Transaction.js";
 import { body, validationResult } from "express-validator";
 
@@ -62,3 +72,5 @@ export const getTransactions = async (req, res) => {
     res.status(500).json({ error: "Server error: " + err.message });
   }
 };
+
+// =============================== END OF FILE ===============================

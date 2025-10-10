@@ -1,3 +1,13 @@
+/**
+ * customerController.js
+ * 
+ * This file handles the validation and registration of users.
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import Customer from "../models/Customer.js";
 import bcrypt from "bcrypt";
 import { body, validationResult } from "express-validator";
@@ -49,3 +59,5 @@ export const register = async (req, res) => {
     res.status(500).json({ error: "Server error: " + err.message });
   }
 };
+
+// =============================== END OF FILE ===============================
