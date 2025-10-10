@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getTransactions, createTransaction } from "../services/api";
 
 export default function Home() {
+  //Retrieving the input values from the user
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("ZAR");
   const [provider, setProvider] = useState("FNB");
@@ -11,25 +12,31 @@ export default function Home() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  //Retrieving the jwt token from storage
   const token = localStorage.getItem("token");
 
+  //Retrieving existing transactions from the user
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
         const res = await getTransactions(token);
         setTransactions(res.data.transactions);
       } catch (err) {
+        //Displays error if api fails
         setError(err.response?.data?.error || "Failed to fetch transactions");
       }
     };
     fetchTransactions();
   }, [token]);
 
+
+  //Creating a new transaction
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setMessage("");
 
+    //Input validation
     const accountPattern = /^[0-9]{10,12}$/;
     const swiftPattern = /^[A-Za-z0-9]{8,11}$/;
     const currencies = ["ZAR", "USD", "EUR"];
@@ -46,12 +53,12 @@ export default function Home() {
     }
 
     if (!currencies.includes(currency)) {
-      setError("Currency must be ZAR, USD, or EUR");
+      setError("Currency has to be one of the currencies provided");
       return;
     }
 
     if (!providers.includes(provider)) {
-      setError("Provider must be a valid bank");
+      setError("Provider must be a provider provided");
       return;
     }
 
@@ -65,11 +72,16 @@ export default function Home() {
       return;
     }
 
+    //Calling api to create transaction
     try {
       const res = await createTransaction({ amount, currency, provider, payeeAccount, swift }, token);
+      //Adding the new transaction
       setTransactions([res.data.transaction, ...transactions]);
+      //Success message
       setMessage("Transaction created successfully!");
+      //Reset form fields
       setAmount(""); setPayeeAccount(""); setSwift(""); setCurrency("ZAR"); setProvider("FNB");
+
     } catch (err) {
       setError(err.response?.data?.error || "Transaction failed");
     }
@@ -103,7 +115,7 @@ export default function Home() {
         <button type="submit">Create Transaction</button>
       </form>
 
-      <h2>Transactions</h2>
+      <h2>Transaction History</h2>
       {transactions.length === 0 ? (
         <p>No transactions yet.</p>
       ) : (
