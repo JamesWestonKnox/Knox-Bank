@@ -41,8 +41,9 @@ export default function Home() {
     //Input validation
     const accountPattern = /^[0-9]{10,12}$/;
     const swiftPattern = /^[A-Za-z0-9]{8,11}$/;
-    const currencies = ["ZAR", "USD", "EUR"];
-    const providers = ["FNB", "ABSA", "Capitec", "Standard Bank"];
+    const currencies = ["ZAR","USD", "EUR","GBP","JPY","AUD","CAD","CNY"];
+    const providers = ["FNB","ABSA","Capitec","Standard Bank","Nedbank","Investec","TymeBank","Discovery Bank","Old Mutual Bank"
+];
 
     if (!amount || !payeeAccount || !swift) {
       setError("All fields must be filled out");
@@ -111,6 +112,11 @@ export default function Home() {
             <option value="ZAR">ZAR</option>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
+            <option value="GBP">EUR</option>
+            <option value="JPY">EUR</option>
+            <option value="AUD">EUR</option>
+            <option value="CAD">EUR</option>
+            <option value="CNY">EUR</option>
           </select>
         </div>
 
@@ -121,6 +127,11 @@ export default function Home() {
             <option value="ABSA">ABSA</option>
             <option value="Capitec">Capitec</option>
             <option value="Standard Bank">Standard Bank</option>
+            <option value="Nedbank">Nedbank</option>
+            <option value="Investec">Investec</option>
+            <option value="TymeBank">TymeBank</option>
+            <option value="Discovery Bank">Discovery Bank</option>
+            <option value="Old Mutual Bank">Old Mutual Bank</option>
           </select>
         </div>
 

@@ -11,16 +11,18 @@
 import Transaction from "../models/Transaction.js";
 import { body, validationResult } from "express-validator";
 
+const allowedCurrencies = ["ZAR", "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CNY"];
+const allowedProviders = ["FNB","ABSA","Capitec","Standard Bank","Nedbank","Investec","TymeBank","Discovery Bank","Old Mutual Bank"];
 // Validation for transaction inputs
 export const validateTransaction = [
   body("amount")
     .isFloat({ gt: 0 })
     .withMessage("Amount must be a number greater than 0"),
   body("currency")
-    .isIn(["ZAR", "USD", "EUR"])
+    .isIn(allowedCurrencies)
     .withMessage("Currency must be ZAR, USD, or EUR"),
   body("provider")
-    .isIn(["FNB", "ABSA", "Capitec", "Standard Bank"])
+    .isIn(allowedProviders)
     .withMessage("Provider must be a valid bank"),
   body("payeeAccount")
     .isNumeric()
