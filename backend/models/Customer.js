@@ -1,3 +1,13 @@
+/**
+ * Customer.js
+ * 
+ * Customer schema for MongoDB
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import mongoose from "mongoose";
 
 const CustomerSchema = new mongoose.Schema({
@@ -8,3 +18,5 @@ const CustomerSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 export default mongoose.model("Customer", CustomerSchema);
+
+// =============================== END OF FILE ===============================

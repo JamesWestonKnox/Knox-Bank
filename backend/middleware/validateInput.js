@@ -1,3 +1,13 @@
+/**
+ * authController.js
+ * 
+ * This file provides a function for validation user registration using regex patterns
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 export const validateRegistration = (req, res, next) => {
   const { fullName, idNumber, accountNumber, email, password } = req.body;
 
@@ -15,3 +25,5 @@ export const validateRegistration = (req, res, next) => {
 
   next();
 };
+
+// =============================== END OF FILE ===============================
