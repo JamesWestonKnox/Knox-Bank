@@ -1,3 +1,13 @@
+/**
+ * authController.js
+ * 
+ * This file handles the authentication of users for logging in to the banking portal
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import Customer from "../models/Customer.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -47,3 +57,5 @@ export const login = async (req, res) => {
     res.status(500).json({ error: "Server error: " + err.message });
   }
 };
+
+// =============================== END OF FILE ===============================

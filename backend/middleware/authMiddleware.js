@@ -1,3 +1,13 @@
+/**
+ * authController.js
+ * 
+ * This file is used to verify JWT token to protect API routes.
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -23,3 +33,5 @@ const authMiddleware = (req, res, next) => {
 };
 
 export default authMiddleware;
+
+// =============================== END OF FILE ===============================

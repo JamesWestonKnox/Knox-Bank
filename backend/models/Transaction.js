@@ -1,3 +1,13 @@
+/**
+ * Transaction.js
+ * 
+ * Transaction schema for MongoDB
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import mongoose from "mongoose";
 
 const TransactionSchema = new mongoose.Schema({
@@ -11,3 +21,5 @@ const TransactionSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 export default mongoose.model("Transaction", TransactionSchema);
+
+// =============================== END OF FILE ===============================

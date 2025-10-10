@@ -10,4 +10,3 @@ Install:
 8. run: npm install.
 9. Dependancies sorted now.
 10. to run and test frontend and backend - open a terminal in each folder and run: npm run dev
-11. then navigate to http://localhost:5173/ for frontend
