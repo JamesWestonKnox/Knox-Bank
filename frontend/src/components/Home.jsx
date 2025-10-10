@@ -145,7 +145,7 @@ export default function Home() {
           <input type="text" value={swift} onChange={(e) => setSwift(e.target.value)} />
         </div>
 
-        <button type="submit" className="btn-primary">Create Transaction</button>
+        <button type="submit" className="btn-primary">Pay now</button>
       </form>
     </div>
 
