@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { getTransactions, createTransaction } from "../services/api";
+import "./CustomStyling.css";
+import logo from "../assets/logo.png";
 
 export default function Home() {
   //Retrieving the input values from the user
@@ -88,45 +90,68 @@ export default function Home() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "50px auto" }}>
-      <h1>Home</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
+ <div className="home-container">
+  <h1 className="home-title">Welcome to KNOX bank</h1>
+
+  <div className="home-columns">
+    <div className="home-form-card">
+      <h2>Create Transaction</h2>
+      {error && <div className="error-message">{error}</div>}
+      {message && <div className="success-message">{message}</div>}
 
       <form onSubmit={handleSubmit}>
-        <input type="number" placeholder="Amount" value={amount} onChange={e => setAmount(e.target.value)} />
+        <div className="form-group">
+          <label>Amount</label>
+          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+        </div>
 
-        <select value={currency} onChange={e => setCurrency(e.target.value)}>
-          <option value="ZAR">ZAR</option>
-          <option value="USD">USD</option>
-          <option value="EUR">EUR</option>
-        </select>
+        <div className="form-group">
+          <label>Currency</label>
+          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+            <option value="ZAR">ZAR</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+          </select>
+        </div>
 
-        <select value={provider} onChange={e => setProvider(e.target.value)}>
-          <option value="FNB">FNB</option>
-          <option value="ABSA">ABSA</option>
-          <option value="Capitec">Capitec</option>
-          <option value="Standard Bank">Standard Bank</option>
-        </select>
+        <div className="form-group">
+          <label>Provider</label>
+          <select value={provider} onChange={(e) => setProvider(e.target.value)}>
+            <option value="FNB">FNB</option>
+            <option value="ABSA">ABSA</option>
+            <option value="Capitec">Capitec</option>
+            <option value="Standard Bank">Standard Bank</option>
+          </select>
+        </div>
 
-        <input type="text" placeholder="Payee Account" value={payeeAccount} onChange={e => setPayeeAccount(e.target.value)} />
-        <input type="text" placeholder="SWIFT Code" value={swift} onChange={e => setSwift(e.target.value)} />
+        <div className="form-group">
+          <label>Payee Account</label>
+          <input type="text" value={payeeAccount} onChange={(e) => setPayeeAccount(e.target.value)} />
+        </div>
 
-        <button type="submit">Create Transaction</button>
+        <div className="form-group">
+          <label>SWIFT Code</label>
+          <input type="text" value={swift} onChange={(e) => setSwift(e.target.value)} />
+        </div>
+
+        <button type="submit" className="btn-primary">Create Transaction</button>
       </form>
+    </div>
 
+    <div className="home-table-card">
       <h2>Transaction History</h2>
       {transactions.length === 0 ? (
         <p>No transactions yet.</p>
       ) : (
-        <table border="1" style={{ width: "100%" }}>
+        <table className="transaction-table">
           <thead>
             <tr>
-              <th>Amount</th><th>Currency</th><th>Provider</th><th>Payee</th><th>SWIFT</th><th>Status</th><th>Date</th>
+              <th>Amount</th><th>Currency</th><th>Provider</th>
+              <th>Payee</th><th>SWIFT</th><th>Status</th><th>Date</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.map(t => (
+            {transactions.map((t) => (
               <tr key={t._id}>
                 <td>{t.amount}</td><td>{t.currency}</td><td>{t.provider}</td>
                 <td>{t.payeeAccount}</td><td>{t.swift}</td><td>{t.status}</td>
@@ -137,5 +162,9 @@ export default function Home() {
         </table>
       )}
     </div>
+  </div>
+</div>
+
+
   );
 }

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { loginCustomer } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import "./CustomStyling.css";
+import logo from "../assets/logo.png";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -70,42 +72,52 @@ export default function LoginForm() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
-      <h1>Customer Login</h1>
+    <div className="register-container">
+      <div className="register-card">
+        <img src={logo} alt="Knox Bank" className="register-logo" />
+        <h1 className="register-title">Customer Login</h1>
 
-      {error && <div style={{ color: "red" }}>{errorMessage}</div>}
-      {isLoggedIn && <div style={{ color: "green" }}>Logged in successfully!</div>}
+        {error && <div className="error-message">{errorMessage}</div>}
+        {isLoggedIn && (
+          <div className="success-message">Logged in successfully!</div>
+        )}
 
-      <form onSubmit={handleFormSubmit}>
-        <label>Account Number</label>
-        <input
-          type="text"
-          value={accountNumber}
-          onChange={handleAccountNumber}
-        />
+        <form onSubmit={handleFormSubmit}>
+          <div className="form-group">
+            <label>Account Number</label>
+            <input
+              type="text"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
+            />
+          </div>
 
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={handlePassword}
-        />
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <button 
+         <button 
         type="submit"
+        className="btn-primary"
         onClick={() => navigate("/home")}
         >
-          Login  
+        Login  
         </button>
 
-        <button
-          type="button"
-          onClick={() => navigate("/register")}
-          style={{ marginTop: 10 }}
-        >
-          Don't have an account? Register
-        </button>
-      </form>
+          <button
+            type="button"
+            className="btn-link"
+            onClick={() => navigate("/register")}
+          >
+            Don't have an account? Register
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
