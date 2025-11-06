@@ -102,10 +102,9 @@ export default function LoginForm() {
             />
           </div>
 
-         <button type="submit" className="btn-primary">
-          Login  
+          <button type="submit" className="btn-primary">
+            Login
           </button>
-
 
           <button
             type="button"
