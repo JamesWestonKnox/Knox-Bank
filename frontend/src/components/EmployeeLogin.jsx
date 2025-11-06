@@ -71,4 +71,40 @@ export default function EmployeeLoginForm() {
       setErrorMessage(err.message || "Login failed");
     }
   };
+
+  return (
+    <div className="register-container">
+      <div className="register-card">
+        <img src={logo} alt="Knox Bank" className="register-logo" />
+        <h1 className="register-title">Employee Login</h1>
+        {error && <div className="error-message">{errorMessage}</div>}
+        {isLoggedIn && (
+          <div className="success-message">Logged in successfully!</div>
+        )}
+        <form onSubmit={handleFormSubmit}>
+          <div className="form-group">
+            <label>Employee Number</label>
+            <input
+              type="text"
+              value={employeeNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className="btn-primary">
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
