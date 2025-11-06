@@ -74,46 +74,60 @@ export default function LoginForm() {
 
   return (
     <div className="register-container">
-      <div className="register-card">
-        <img src={logo} alt="Knox Bank" className="register-logo" />
-        <h1 className="register-title">Customer Login</h1>
+      <div className="cards-wrapper">
+        <div className="register-card">
+          <img src={logo} alt="Knox Bank" className="register-logo" />
+          <h1 className="register-title">Customer Login</h1>
 
-        {error && <div className="error-message">{errorMessage}</div>}
-        {isLoggedIn && (
-          <div className="success-message">Logged in successfully!</div>
-        )}
+          {error && <div className="error-message">{errorMessage}</div>}
+          {isLoggedIn && (
+            <div className="success-message">Logged in successfully!</div>
+          )}
 
-        <form onSubmit={handleFormSubmit}>
-          <div className="form-group">
-            <label>Account Number</label>
-            <input
-              type="text"
-              value={accountNumber}
-              onChange={(e) => setAccountNumber(e.target.value)}
-            />
-          </div>
+          <form onSubmit={handleFormSubmit}>
+            <div className="form-group">
+              <label>Account Number</label>
+              <input
+                type="text"
+                value={accountNumber}
+                onChange={(e) => setAccountNumber(e.target.value)}
+              />
+            </div>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-          <button type="submit" className="btn-primary">
-            Login
-          </button>
+            <button type="submit" className="btn-primary">
+              Login
+            </button>
+
+            <button
+              type="button"
+              className="btn-link"
+              onClick={() => navigate("/register")}
+            >
+              Don't have an account? Register
+            </button>
+          </form>
+        </div>
+        <div className="register-card employee-card">
+          <h1 className="register-title">Employee Login</h1>
+          <p>Staff access only</p>
 
           <button
             type="button"
-            className="btn-link"
-            onClick={() => navigate("/register")}
+            className="btn-primary"
+            onClick={() => navigate("/employee-login")}
           >
-            Don't have an account? Register
+            Employee Login
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
