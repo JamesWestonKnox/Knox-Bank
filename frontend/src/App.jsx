@@ -17,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/employee-login" element={<EmployeeLogin />} />
+        <Route path="/employee-portal" element={<EmployeePortal />} />
         <Route path="*" element={<Navigate to="/register" replace />} />
       </Routes>
     </Router>
