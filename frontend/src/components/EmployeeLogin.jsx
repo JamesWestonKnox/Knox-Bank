@@ -88,7 +88,7 @@ export default function EmployeeLoginForm() {
             <input
               type="text"
               value={employeeNumber}
-              onChange={(e) => setAccountNumber(e.target.value)}
+              onChange={(e) => setEmployeeNumber(e.target.value)}
             />
           </div>
 
