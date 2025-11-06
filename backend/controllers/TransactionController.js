@@ -1,18 +1,37 @@
 /**
  * transactionController.js
- * 
+ *
  * This file handles the validation and creation of new transactions
- * 
+ *
  * Reference:
- * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini.
  * Available at: https://chat.openai.com
  */
 
 import Transaction from "../models/Transaction.js";
 import { body, validationResult } from "express-validator";
 
-const allowedCurrencies = ["ZAR", "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CNY"];
-const allowedProviders = ["FNB","ABSA","Capitec","Standard Bank","Nedbank","Investec","TymeBank","Discovery Bank","Old Mutual Bank"];
+const allowedCurrencies = [
+  "ZAR",
+  "USD",
+  "EUR",
+  "GBP",
+  "JPY",
+  "AUD",
+  "CAD",
+  "CNY",
+];
+const allowedProviders = [
+  "FNB",
+  "ABSA",
+  "Capitec",
+  "Standard Bank",
+  "Nedbank",
+  "Investec",
+  "TymeBank",
+  "Discovery Bank",
+  "Old Mutual Bank",
+];
 // Validation for transaction inputs
 export const validateTransaction = [
   body("amount")
@@ -37,13 +56,13 @@ export const validateTransaction = [
 //Method to create new transaction
 export const createTransaction = async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() });
 
   try {
-    
     //Getting data from the body
     const { amount, currency, provider, payeeAccount, swift } = req.body;
-    
+
     //Creating a new transaction object with the data
     const transaction = new Transaction({
       customer: req.user.id,
@@ -53,7 +72,7 @@ export const createTransaction = async (req, res) => {
       payeeAccount,
       swift,
     });
-    
+
     //Saving it to the database
     await transaction.save();
 
@@ -66,9 +85,10 @@ export const createTransaction = async (req, res) => {
 //Method to get all transactions
 export const getTransactions = async (req, res) => {
   try {
-    
     //Retrieving all transactions related to the customer and sorting it newest first
-    const transactions = await Transaction.find({ customer: req.user.id }).sort({ createdAt: -1 });
+    const transactions = await Transaction.find({ customer: req.user.id }).sort(
+      { createdAt: -1 }
+    );
     res.json({ transactions });
   } catch (err) {
     res.status(500).json({ error: "Server error: " + err.message });
