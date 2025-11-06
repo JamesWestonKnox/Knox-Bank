@@ -59,7 +59,7 @@ export default function EmployeeLoginForm() {
       setIsLoggedIn(true);
       setError(false);
       setErrorMessage("");
-      navigate("/employeePortal");
+      navigate("/employee-portal");
 
       // Clear fields
       setEmployeeNumber("");
