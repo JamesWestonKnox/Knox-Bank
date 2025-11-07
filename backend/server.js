@@ -1,18 +1,18 @@
 /**
  * server.js
- * 
+ *
  * This file is used to setup the backend Express server.
- * 
+ *
  * Reference:
- * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini.
  * Available at: https://chat.openai.com
  */
 
 import express from "express";
-import https from "https";
+import https from "node:https";
 import dotenv from "dotenv";
 import helmet from "helmet";
-import fs from "fs";
+import fs from "node:fs";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
@@ -32,9 +32,9 @@ const app = express();
 
 // Key and certificate for HTTPS server
 const options = {
-    key: fs.readFileSync('keys/privatekey.pem'),
-    cert: fs.readFileSync('keys/certificate.pem')
-}
+  key: fs.readFileSync("keys/privatekey.pem"),
+  cert: fs.readFileSync("keys/certificate.pem"),
+};
 
 // Helmet used for HTTP security headers
 app.use(helmet());
@@ -55,7 +55,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
 
 // Create HTTPS server with SSL keys
-let server = https.createServer(options,app);
+let server = https.createServer(options, app);
 
 // Start server
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
