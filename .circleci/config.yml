@@ -8,7 +8,6 @@ jobs:
     docker:
       - image: cimg/node:20.5
     working_directory: ~/repo
-
     steps:
       - checkout
 
@@ -44,21 +43,8 @@ jobs:
               -Dsonar.host.url=${SONAR_HOST_URL} \
               -Dsonar.token=${SONAR_TOKEN}
 
-      - run:
-          name: Start Backend & Run Newman Tests
-          command: |
-            cd backend
-            export CI=true
-            npm install --save-dev newman
-            # Start server in background using HTTP for CI
-            NODE_TLS_REJECT_UNAUTHORIZED=0 npm run dev &> server.log &
-            SERVER_PID=$!
-            echo "Server PID: $SERVER_PID"
-            echo "Waiting 10 seconds for server to start..."
-            sleep 10
-            # Set baseUrl variable for Newman dynamically
-            npx newman run ../postman/KnoxBank_API_Tests.postman_collection.json \
-              --env-var "CI=true" \
-              --reporters cli,junit
-            # Kill server after tests
-            kill $SERVER_PID
+workflows:
+  version: 2
+  security_scan_workflow:
+    jobs:
+      - security-pipeline
