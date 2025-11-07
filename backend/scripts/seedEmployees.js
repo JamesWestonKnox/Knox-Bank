@@ -1,3 +1,12 @@
+/**
+ * seedEmployees.js
+ * 
+ * This file populates the application with predefined employee accounts.
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
@@ -5,12 +14,14 @@ import Employee from "../models/Employee.js";
 
 dotenv.config();
 
+//Predefined employee accounts
 const employees = 
 [
 {fullName: "Thomas Knox" , employeeNumber: "EMP0001" , password: "@A1B2C3D4" },
 {fullName: "James Knox", employeeNumber: "EMP0002" , password: "@Password1"}
 ];
 
+//Function to seed employee acounts into the database
 const seed = async () => {
     try{
         await mongoose.connect(process.env.MONGO_URI, {
@@ -20,6 +31,7 @@ const seed = async () => {
         console.log("Connected to Database");
     
         for (const emp of employees){
+            //Hashing the passwords
             const passwordHash = await bcrypt.hash(emp.password, 10);
 
             const exists = await Employee.findOne({employeeNumber: emp.employeeNumber});
