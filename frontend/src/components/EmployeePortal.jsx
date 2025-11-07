@@ -62,7 +62,7 @@ export default function EmployeePortal() {
           {pendingTransactions.length === 0 ?(
             <p>No pending transactions</p>
           ) : (
-            <table className="transaction-table">
+            <table className="transaction-table pending-table">
               <thead>
                 <tr>
                   <th>Amount</th>
