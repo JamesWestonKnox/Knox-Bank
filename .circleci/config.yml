@@ -32,12 +32,11 @@ jobs:
             cd backend && npm audit --audit-level=high || true
             cd ../frontend && npm audit --audit-level=high || true
 
-       - run:
+      - run:
           name: SonarCloud Scan
           command: |
             cd backend
             npm install sonar-scanner --save-dev
-            # Give execute permissions to the scanner
             chmod +x node_modules/sonar-scanner/bin/sonar-scanner
             npx sonar-scanner \
               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
