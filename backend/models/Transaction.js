@@ -22,7 +22,9 @@ const TransactionSchema = new mongoose.Schema(
     provider: { type: String, required: true },
     payeeAccount: { type: String, required: true },
     swift: { type: String, required: true },
-    status: { type: String, default: "PENDING" },
+    status: { type: String, 
+      enum: ["Pending", "Verified", "Rejected", "Submitted to SWIFT"],
+      default: "Pending" },
   },
   { timestamps: true }
 );
