@@ -50,15 +50,20 @@ jobs:
             cd backend
             nohup npm run dev &      # run server in background
             echo "Waiting for server to start..."
-            sleep 5
+            sleep 10
 
       - run:
           name: Run API Tests
           command: |
             cd backend
             npm install --save-dev newman
-            echo "Running Postman tests..."
-            npx newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit \ --insecure
+            echo "Waiting for server to be ready..."
+            until nc -z localhost 4000; do
+              echo "Server not ready, sleeping..."
+              sleep 1
+            done
+            echo "Server is up, running Postman tests..."
+            npx newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit --insecure
 
 workflows:
   version: 2
