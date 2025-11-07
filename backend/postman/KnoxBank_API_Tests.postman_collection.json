@@ -102,7 +102,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"fullName\": \"Duplicate User\",\n  \"idNumber\": \"9801015800099\",\n  \"accountNumber\": \"{{registeredAccountNumber}}\",\n  \"password\": \"SecurePass123!\"\n}"
