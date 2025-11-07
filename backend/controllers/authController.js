@@ -107,7 +107,9 @@ export const loginEmployee = async (req, res) => {
     });
 
     //Success response
-    res.json({ user: { id: employee._id, fullName: employee.fullName, employeeNumber} });
+    res.json({ 
+      token,
+      user: { id: employee._id, fullName: employee.fullName, employeeNumber} });
   } catch (err) {
     
     //Error response if errors occur

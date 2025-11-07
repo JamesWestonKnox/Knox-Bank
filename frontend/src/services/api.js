@@ -52,3 +52,21 @@ export const createTransaction = async (data, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+export const getAllTransactions = async (token) => {
+  return await API.get("/transaction/employee/transactions", {
+    headers: {Authorization: `Bearer ${token}`},
+  });
+};
+
+export const verifyTransaction = async (id, token) => {
+  return await API.patch(`/transaction/employee/verify/${id}`, {}, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
+};
+
+export const submitToSwift = async (token) => {
+  return await API.post("/transaction/employee/submit", {},{
+    headers: {Authorization: `Bearer ${token}`},
+  });
+};
