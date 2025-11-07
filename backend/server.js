@@ -30,9 +30,11 @@ connectDB();
 const PORT = process.env.PORT || 4000;
 const app = express();
 
+const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
+
 // Key and certificate for HTTPS server
 const options = {
-  key: fs.readFileSync("keys/privatekey.pem"),
+  key: privateKey,
   cert: fs.readFileSync("keys/certificate.pem"),
 };
 
