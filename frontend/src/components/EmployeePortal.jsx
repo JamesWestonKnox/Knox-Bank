@@ -24,9 +24,9 @@ export default function EmployeePortal() {
   useEffect(() => {
     fetchTransactions();
 
-    const storedEmployee = localStorage.getItem("user");
-    if (storedEmployee){
-      setEmployee(JSON.parse(storedEmployee));
+    const employeeData = JSON.parse(localStorage.getItem("employee"));
+    if (employeeData){
+      setEmployee(employeeData);
     }
   }, [token]
   );

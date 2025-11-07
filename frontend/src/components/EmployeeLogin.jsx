@@ -55,6 +55,7 @@ export default function EmployeeLoginForm() {
     // Call backend API
     try {
       const data = await loginEmployee({ employeeNumber, password });
+      localStorage.setItem("employee", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
       setIsLoggedIn(true);
       setError(false);
