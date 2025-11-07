@@ -50,6 +50,7 @@ https://github.com/JamesWestonKnox/Knox-Bank.git
 
 **Youtube Video**
 
+https://youtu.be/GDZMiXWf5_I
 
 **SonarQube Scan**
 
