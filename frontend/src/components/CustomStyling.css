@@ -137,7 +137,8 @@
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .transaction-table {
@@ -190,4 +191,18 @@
   color: #34495e;
   margin-bottom: 20px;
   font-size: 15px;
+}
+
+.pending-table{
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  overflow-x: hidden;
+}
+.pending-table th,
+.pending-table td {
+  padding: 8px 10px;
+  word-wrap: break-word;
+  white-space: normal;
+  font-size: 14px;
 }
