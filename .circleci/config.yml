@@ -55,7 +55,7 @@ jobs:
             echo "Server PID: $SERVER_PID"
             echo "Waiting 10 seconds for server to start..."
             sleep 10
-            npx newman run ../postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit
+            npx newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit
             kill $SERVER_PID
 
 workflows:
