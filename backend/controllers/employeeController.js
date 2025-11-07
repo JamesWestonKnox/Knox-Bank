@@ -1,3 +1,13 @@
+/**
+ * employeeController.js
+ * 
+ * This file handles the methods that allow employees to view transactions, verify and submit.
+ * 
+ * Reference:
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * Available at: https://chat.openai.com
+ */
+
 import Transaction from "../models/Transaction.js";
 
 //Method to fetch all pending and verified transactions seperately
@@ -22,6 +32,7 @@ export const verifyTransaction = async (req, res) => {
             return res.status(404).json({error: "No transaction found"});
          }
 
+         //Verifying the transaction swift code and payee code
         const payeeValid = /^\d{10,12}$/.test(transaction.payeeAccount);
         const swiftValid = /^[A-Za-z0-9]{8,11}$/.test(transaction.swift);
 
@@ -35,6 +46,8 @@ export const verifyTransaction = async (req, res) => {
     }
 };
 
+
+//Method allowing employees to submit all verified transactions to SWIFT
 export const submitToSwift = async (req, res) => {
     try{
         const verifiedTransactions = await Transaction.find({status: "Verified"});
@@ -55,3 +68,4 @@ export const submitToSwift = async (req, res) => {
 
 
 };
+// =============================== END OF FILE ===============================
