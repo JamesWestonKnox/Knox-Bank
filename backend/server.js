@@ -10,7 +10,6 @@
 
 import express from "express";
 import https from "node:https";
-import http from "node:http";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import fs from "node:fs";
@@ -31,6 +30,12 @@ connectDB();
 const PORT = process.env.PORT || 4000;
 const app = express();
 
+// Key and certificate for HTTPS server
+const options = {
+  key: fs.readFileSync("keys/privatekey.pem"),
+  cert: fs.readFileSync("keys/certificate.pem"),
+};
+
 // Helmet used for HTTP security headers
 app.use(helmet());
 
@@ -49,23 +54,10 @@ app.use("/api/customer", customerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
 
-app.get("/health", (req, res) => res.status(200).send("OK"));
+// Create HTTPS server with SSL keys
+let server = https.createServer(options, app);
 
-let server;
-if (process.env.CI) {
-  server = http.createServer(app);
-  server.listen(PORT, "0.0.0.0", () =>
-    console.log(`CI server running on HTTP port ${PORT}`)
-  );
-} else {
-  const options = {
-    key: fs.readFileSync("keys/privatekey.pem"),
-    cert: fs.readFileSync("keys/certificate.pem"),
-  };
-  server = https.createServer(options, app);
-  server.listen(PORT, "0.0.0.0", () =>
-    console.log(`Server running on HTTPS port ${PORT}`)
-  );
-}
+// Start server
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // =============================== END OF FILE ===============================
