@@ -48,18 +48,24 @@ jobs:
           name: Start Backend Server
           command: |
             cd backend
-            nohup npm run dev &      # run server in background
+            export CI=true
+            nohup npm run dev &  # Run server in background
             echo "Waiting for server to start..."
-            sleep 10
+            for i in {1..30}; do
+              if curl -s http://localhost:4000/health >/dev/null 2>&1; then
+                echo "Server is up!"
+                break
+              else
+                echo "Waiting for server..."
+                sleep 2
+              fi
+            done
 
       - run:
           name: Run API Tests
           command: |
             cd backend
             npm install --save-dev newman
-            echo "Waiting for server to start..."
-            sleep 15
-            echo "Server is up, running Postman tests..."
             npx newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit --insecure
 
 workflows:
