@@ -36,8 +36,8 @@ jobs:
           name: SonarCloud Scan
           command: |
             cd backend
-            npm install sonar-scanner --save-dev
-            chmod +x node_modules/sonar-scanner/bin/sonar-scanner
+            npm install --save-dev sonar-scanner
+            echo "Starting SonarCloud scan..."
             npx sonar-scanner \
               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
               -Dsonar.organization=${SONAR_ORG_KEY} \
@@ -48,8 +48,10 @@ jobs:
       - run:
           name: Run API Tests
           command: |
-            npm install newman --save-dev
-            newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit
+            cd backend
+            npm install --save-dev newman
+            echo "Running Postman tests..."
+            npx newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit
 
 workflows:
   version: 2
