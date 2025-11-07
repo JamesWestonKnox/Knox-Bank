@@ -6,7 +6,7 @@ orbs:
 jobs:
   security-pipeline:
     docker:
-      - image cimg/node:20.5
+      - image: cimg/node:20.5
     working_directory: ~/repo
 
     steps:
