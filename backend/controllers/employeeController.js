@@ -1,4 +1,4 @@
-import Transaction from "../models/Transaction";
+import Transaction from "../models/Transaction.js";
 
 //Method to fetch all pending and verified transactions seperately
 export const getAllTransactions = async (req, res) => {
