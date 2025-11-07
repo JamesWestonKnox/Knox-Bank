@@ -15,6 +15,7 @@ export default function Home() {
 
   //Retrieving the jwt token from storage
   const token = localStorage.getItem("token");
+  const [user, setUser] = useState(null);
 
   //Retrieving existing transactions from the user
   useEffect(() => {
@@ -28,6 +29,11 @@ export default function Home() {
       }
     };
     fetchTransactions();
+
+    const storedUser = localStorage.getItem("user");
+    if(storedUser){
+      setUser(JSON.parse(storedUser));
+    }
   }, [token]);
 
   //Creating a new transaction
@@ -106,7 +112,9 @@ export default function Home() {
   return (
     <div className="home-container">
       <h1 className="home-title">Welcome to KNOX bank</h1>
-
+      {user && (
+        <h2 style={{color: "white"}}>Welcome back, {user.fullName}.</h2>
+      )}
       <div className="home-columns">
         <div className="home-form-card">
           <h2>Create Transaction</h2>

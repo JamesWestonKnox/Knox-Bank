@@ -54,6 +54,8 @@ export default function LoginForm() {
     // Call backend API
     try {
       const data = await loginCustomer({ accountNumber, password });
+
+      localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
       setIsLoggedIn(true);
       setError(false);

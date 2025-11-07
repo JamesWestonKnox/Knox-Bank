@@ -7,8 +7,9 @@ export default function EmployeePortal() {
   const [verifiedTransactions, setVerifiedTransactions] = useState([]);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [employee, setEmployee] = useState(null);
   const token = localStorage.getItem("token");
-
+  
   const fetchTransactions = async () =>{
     try{
       const res = await getAllTransactions(token);
@@ -22,6 +23,11 @@ export default function EmployeePortal() {
 
   useEffect(() => {
     fetchTransactions();
+
+    const storedEmployee = localStorage.getItem("user");
+    if (storedEmployee){
+      setEmployee(JSON.parse(storedEmployee));
+    }
   }, [token]
   );
 
@@ -52,7 +58,10 @@ export default function EmployeePortal() {
   return (
     <div className="home-container">
       <h1 className="home-title">Employee Portal</h1>
-
+      {employee && (
+        <h2 style={{color: "white"}}>
+          Welcome back, {employee.fullName}.</h2>
+      )}
       {error && <div className="error-message">{error}</div>}
       {message && <div className="success-message">{message}</div>}
 
