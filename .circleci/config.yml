@@ -36,14 +36,13 @@ jobs:
           name: SonarCloud Scan
           command: |
             cd backend
-            npm install --save-dev sonar-scanner
-            chmod +x node_modules/sonar-scanner/bin/sonar-scanner
-            npx sonar-scanner \
+            npm install --save-dev sonarqube-scanner
+            npx sonarqube-scanner \
               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
               -Dsonar.organization=${SONAR_ORG_KEY} \
               -Dsonar.sources=. \
               -Dsonar.host.url=${SONAR_HOST_URL} \
-              -Dsonar.login=${SONAR_TOKEN}
+              -Dsonar.token=${SONAR_TOKEN}
 
       - run:
           name: Run API Tests
