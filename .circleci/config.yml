@@ -49,18 +49,18 @@ jobs:
           command: |
             cd backend
             export CI=true
-            # Start server in background
-            nohup npm run dev &
-            # Give it a few seconds to fully start
+            nohup npm run dev > server.log>&1 &
+            SERVER_PID=$!
+            echo "Server PID: $SERVER_PID"
             echo "Waiting 10 seconds for server to start..."
             sleep 10
+            export NODE_TLS_REJECT_UNAUTHORIZED=0
 
       - run:
           name: Run API Tests with Newman
           command: |
             cd backend
             npm install --save-dev newman
-            # Ignore self-signed cert errors
             npx newman run postman/KnoxBank_API_Tests.postman_collection.json \
               --reporters cli,junit \
               --insecure
