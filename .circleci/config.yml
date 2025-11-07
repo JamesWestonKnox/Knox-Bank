@@ -45,24 +45,23 @@ jobs:
               -Dsonar.token=${SONAR_TOKEN}
 
       - run:
-          name: Start Backend Server
+          name: Start Backend & Run Newman Tests
           command: |
             cd backend
+            export NODE_TLS_REJECT_UNAUTHORIZED=0
             export CI=true
-            export NODE_TLS_REJECT_UNAUTHORIZED=0
             nohup npm run dev > server.log 2>&1 &
-            SERVER_PID=$!
-            echo "Server PID: $SERVER_PID"
-
-      - run:
-          name: Run API Tests with Newman
-          command: |
-            cd backend
-            export NODE_TLS_REJECT_UNAUTHORIZED=0
+            echo "Server starting..."
+            for i in {1..20}; do
+              if nc -z localhost 4000; then
+                echo "Server is up!"
+                break
+              fi
+              echo "Waiting for server..."
+              sleep 2
+            done
             npm install --save-dev newman
-            npx newman run postman/KnoxBank_API_Tests.postman_collection.json \
-              --reporters cli,junit \
-              --insecure
+            npx newman run postman/KnoxBank_API_Tests.postman_collection.json \ --reporters cli,junit \ --insecure
 
 workflows:
   version: 2
