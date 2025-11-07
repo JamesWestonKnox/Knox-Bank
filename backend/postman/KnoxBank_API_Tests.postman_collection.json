@@ -107,7 +107,7 @@
               }
             },
             "url": {
-              "raw": "https://localhost:4000/api/customer/register",
+              "raw": "http://localhost:4000/api/customer/register",
               "protocol": "https",
               "host": ["localhost"],
               "port": "4000",
@@ -239,7 +239,7 @@
               }
             },
             "url": {
-              "raw": "https://localhost:4000/api/customer/register",
+              "raw": "http://localhost:4000/api/customer/register",
               "protocol": "https",
               "host": ["localhost"],
               "port": "4000",
