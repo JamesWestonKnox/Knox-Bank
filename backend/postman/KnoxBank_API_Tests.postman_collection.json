@@ -3,8 +3,7 @@
     "_postman_id": "97299eaa-5a7d-4877-90dd-0daf4f559aae",
     "name": "KnoxBank API Tests",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "49882860",
-    "_collection_link": "https://jameswestonknox-3446042.postman.co/workspace/711692ff-f53e-4931-8ffc-660edfcc313e/collection/49882860-97299eaa-5a7d-4877-90dd-0daf4f559aae?action=share&source=collection_link&creator=49882860"
+    "_exporter_id": "49882860"
   },
   "item": [
     {
@@ -17,74 +16,32 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "// Generate unique account number (10 digits)\r",
-                  "const timestamp = Date.now().toString().slice(-10);\r",
-                  "pm.collectionVariables.set(\"uniqueAccountNumber\", timestamp);\r",
-                  "\r",
-                  "// Generate unique ID number (13 digits)\r",
-                  "const randomDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');\r",
-                  "pm.collectionVariables.set(\"uniqueIdNumber\", \"98010158000\" + randomDigits);\r",
-                  "\r",
-                  "// Generate unique full name\r",
-                  "const randomNum = Math.floor(Math.random() * 10000);\r",
-                  "pm.collectionVariables.set(\"uniqueFullName\", \"Test User \" + randomNum);\r",
-                  "\r",
-                  "// Set test password\r",
-                  "pm.collectionVariables.set(\"testPassword\", \"SecurePass123!\");\r",
-                  "\r",
-                  "// Log generated test data\r",
-                  "console.log(\"Generated test data:\", {\r",
-                  "    Name: pm.collectionVariables.get(\"uniqueFullName\"),\r",
-                  "    ID: pm.collectionVariables.get(\"uniqueIdNumber\"),\r",
-                  "    Account: pm.collectionVariables.get(\"uniqueAccountNumber\")\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
+                  "const timestamp = Date.now().toString().slice(-10);",
+                  "pm.collectionVariables.set(\"uniqueAccountNumber\", timestamp);",
+                  "const randomDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');",
+                  "pm.collectionVariables.set(\"uniqueIdNumber\", \"98010158000\" + randomDigits);",
+                  "const randomNum = Math.floor(Math.random() * 10000);",
+                  "pm.collectionVariables.set(\"uniqueFullName\", \"Test User \" + randomNum);",
+                  "pm.collectionVariables.set(\"testPassword\", \"SecurePass123!\");"
+                ]
               }
             },
             {
               "listen": "test",
               "script": {
                 "exec": [
-                  "let jsonData;\r",
-                  "try {\r",
-                  "    jsonData = pm.response.json();\r",
-                  "} catch (e) {\r",
-                  "    console.warn(\"Response is not JSON or empty, skipping JSON parsing.\");\r",
-                  "}\r",
-                  "\r",
-                  "// Status code test\r",
-                  "pm.test(\"Status code is 201 Created\", () => {\r",
-                  "    pm.response.to.have.status(201);\r",
-                  "});\r",
-                  "\r",
-                  "// Save registered account safely\r",
-                  "if (jsonData && jsonData.customer) {\r",
-                  "    pm.collectionVariables.set(\"registeredAccountNumber\", jsonData.customer.accountNumber);\r",
-                  "    pm.collectionVariables.set(\"registeredCustomerId\", jsonData.customer.id);\r",
-                  "\r",
-                  "    console.log(\"✓ Customer registered successfully!\");\r",
-                  "    console.log(\"Customer ID:\", jsonData.customer.id);\r",
-                  "    console.log(\"Account Number:\", jsonData.customer.accountNumber);\r",
-                  "} else {\r",
-                  "    console.warn(\"❌ Could not parse customer data. Collection variables may not be set for duplicate test.\");\r",
-                  "}\r",
-                  "\r",
-                  "// Optional: Basic JSON structure test\r",
-                  "if (jsonData) {\r",
-                  "    pm.test(\"Response has customer data\", () => {\r",
-                  "        pm.expect(jsonData).to.have.property('customer');\r",
-                  "        pm.expect(jsonData.customer).to.have.property('id');\r",
-                  "        pm.expect(jsonData.customer).to.have.property('fullName');\r",
-                  "        pm.expect(jsonData.customer).to.have.property('accountNumber');\r",
-                  "    });\r",
-                  "}\r",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
+                  "let jsonData;",
+                  "try {",
+                  "    jsonData = pm.response.json();",
+                  "} catch (e) {}",
+                  "pm.test(\"Status code is 201 Created\", () => {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "if (jsonData && jsonData.customer) {",
+                  "    pm.collectionVariables.set(\"registeredAccountNumber\", jsonData.customer.accountNumber);",
+                  "    pm.collectionVariables.set(\"registeredCustomerId\", jsonData.customer.id);",
+                  "}"
+                ]
               }
             }
           ],
@@ -93,24 +50,16 @@
             "header": [
               {
                 "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
+                "value": "application/json"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"fullName\": \"{{uniqueFullName}}\",\r\n  \"idNumber\": \"{{uniqueIdNumber}}\",\r\n  \"accountNumber\": \"{{uniqueAccountNumber}}\",\r\n  \"password\": \"{{testPassword}}\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "text"
-                }
-              }
+              "raw": "{\n  \"fullName\": \"{{uniqueFullName}}\",\n  \"idNumber\": \"{{uniqueIdNumber}}\",\n  \"accountNumber\": \"{{uniqueAccountNumber}}\",\n  \"password\": \"{{testPassword}}\"\n}"
             },
             "url": {
-              "raw": "https://localhost:4000/api/customer/register",
-              "protocol": "https",
-              "host": ["localhost"],
-              "port": "4000",
+              "raw": "{{baseUrl}}/api/customer/register",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "customer", "register"]
             }
           },
@@ -123,126 +72,44 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const registeredAccount = pm.collectionVariables.get(\"registeredAccountNumber\");\r",
-                  "\r",
-                  "if (!registeredAccount) {\r",
-                  "    console.error(\"❌ registeredAccountNumber not set! Make sure registration ran first.\");\r",
-                  "} else {\r",
-                  "    console.log(\"Duplicate test will use account:\", registeredAccount);\r",
-                  "}\r",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
+                  "const registeredAccount = pm.collectionVariables.get(\"registeredAccountNumber\");",
+                  "if (!registeredAccount) {",
+                  "    console.error(\"registeredAccountNumber not set!\");",
+                  "}"
+                ]
               }
             },
             {
               "listen": "test",
               "script": {
                 "exec": [
-                  "const responseText = pm.response.text();\r",
-                  "console.log(\"Status Code:\", pm.response.code);\r",
-                  "console.log(\"Response Body:\", responseText);\r",
-                  "console.log(\"Content-Type:\", pm.response.headers.get(\"Content-Type\"));\r",
-                  "\r",
-                  "// Test status code\r",
-                  "pm.test(\"Status code is 400 Bad Request\", () => {\r",
-                  "    pm.response.to.have.status(400);\r",
-                  "});\r",
-                  "\r",
-                  "// Safely parse JSON only if response exists\r",
-                  "if (responseText) {\r",
-                  "    try {\r",
-                  "        const jsonData = pm.response.json();\r",
-                  "        pm.test(\"Duplicate error message exists\", () => {\r",
-                  "            const errorMsg = jsonData.error || JSON.stringify(jsonData.errors || \"\");\r",
-                  "            pm.expect(errorMsg).to.include(\"already in use\");\r",
-                  "        });\r",
-                  "        console.log(\"✓ Duplicate validation working correctly!\");\r",
-                  "    } catch (e) {\r",
-                  "        console.warn(\"Response not valid JSON, skipping JSON assertions:\", e.message);\r",
-                  "    }\r",
-                  "} else {\r",
-                  "    console.warn(\"Response body empty — skipping JSON assertions (normal in Runner)\");\r",
-                  "}\r",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
+                  "const responseText = pm.response.text();",
+                  "pm.test(\"Status code is 400 Bad Request\", () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "if (responseText) {",
+                  "    try {",
+                  "        const jsonData = pm.response.json();",
+                  "        pm.test(\"Duplicate error message exists\", () => {",
+                  "            const errorMsg = jsonData.error || JSON.stringify(jsonData.errors || \"\");",
+                  "            pm.expect(errorMsg).to.include(\"already in use\");",
+                  "        });",
+                  "    } catch (e) {}",
+                  "}"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Cache-Control",
-                "value": "no-cache",
-                "name": "cache-control",
-                "type": "text"
-              },
-              {
-                "key": "Postman-Token",
-                "value": "<calculated when request is sent>",
-                "name": "postman-token",
-                "type": "text"
-              },
-              {
-                "key": "Content-Length",
-                "value": "0",
-                "name": "content-length",
-                "type": "text"
-              },
-              {
-                "key": "Host",
-                "value": "<calculated when request is sent>",
-                "name": "host",
-                "type": "text"
-              },
-              {
-                "key": "User-Agent",
-                "value": "PostmanRuntime/7.39.1",
-                "name": "user-agent",
-                "type": "text"
-              },
-              {
-                "key": "Accept",
-                "value": "*/*",
-                "name": "accept",
-                "type": "text"
-              },
-              {
-                "key": "Accept-Encoding",
-                "value": "gzip, deflate, br",
-                "name": "accept-encoding",
-                "type": "text"
-              },
-              {
-                "key": "Connection",
-                "value": "keep-alive",
-                "name": "connection",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"fullName\": \"Duplicate User\",\r\n  \"idNumber\": \"9801015800099\",\r\n  \"accountNumber\": \"{{registeredAccountNumber}}\",\r\n  \"password\": \"SecurePass123!\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "text"
-                }
-              }
+              "raw": "{\n  \"fullName\": \"Duplicate User\",\n  \"idNumber\": \"9801015800099\",\n  \"accountNumber\": \"{{registeredAccountNumber}}\",\n  \"password\": \"SecurePass123!\"\n}"
             },
             "url": {
-              "raw": "https://localhost:4000/api/customer/register",
-              "protocol": "https",
-              "host": ["localhost"],
-              "port": "4000",
+              "raw": "{{baseUrl}}/api/customer/register",
+              "host": ["{{baseUrl}}"],
               "path": ["api", "customer", "register"]
             }
           },
@@ -252,35 +119,26 @@
     }
   ],
   "variable": [
+    { "key": "uniqueAccountNumber", "value": "" },
+    { "key": "uniqueIdNumber", "value": "" },
+    { "key": "uniqueFullName", "value": "" },
+    { "key": "testPassword", "value": "" },
+    { "key": "registeredAccountNumber", "value": "" },
+    { "key": "registeredCustomerId", "value": "" },
+    { "key": "baseUrl", "value": "https://localhost:4000" }
+  ],
+  "event": [
     {
-      "key": "uniqueAccountNumber",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "uniqueIdNumber",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "uniqueFullName",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "testPassword",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "registeredAccountNumber",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "registeredCustomerId",
-      "value": "",
-      "type": "string"
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "if (pm.environment.get('CI') === 'true') {",
+          "    pm.collectionVariables.set('baseUrl', 'http://localhost:4000');",
+          "} else {",
+          "    pm.collectionVariables.set('baseUrl', 'https://localhost:4000');",
+          "}"
+        ]
+      }
     }
   ]
 }
