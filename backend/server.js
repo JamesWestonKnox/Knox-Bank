@@ -10,6 +10,7 @@
 
 import express from "express";
 import https from "node:https";
+import http from "node:http";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import fs from "node:fs";
@@ -52,13 +53,11 @@ app.get("/health", (req, res) => res.status(200).send("OK"));
 
 let server;
 if (process.env.CI) {
-  // CI uses HTTP
   server = http.createServer(app);
   server.listen(PORT, "0.0.0.0", () =>
     console.log(`CI server running on HTTP port ${PORT}`)
   );
 } else {
-  // Local/dev/prod HTTPS
   const options = {
     key: fs.readFileSync("keys/privatekey.pem"),
     cert: fs.readFileSync("keys/certificate.pem"),
