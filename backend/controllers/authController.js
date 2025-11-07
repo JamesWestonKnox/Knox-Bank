@@ -1,12 +1,13 @@
 /**
  * authController.js
- * 
+ *
  * This file handles the authentication of users for logging in to the banking portal
- * 
+ *
  * Reference:
- * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini. 
+ * OpenAI, 2025. ChatGPT [Computer program]. Version GPT-5 mini.
  * Available at: https://chat.openai.com
  */
+
 import Employee from "../models/Employee.js";
 import Customer from "../models/Customer.js";
 import bcrypt from "bcrypt";
@@ -17,34 +18,55 @@ dotenv.config();
 
 //Method allowing the user to login
 export const login = async (req, res) => {
-  await body("accountNumber").isNumeric().isLength({min: 10, max: 12}).withMessage("Account number must be 10 to 12 digits").run(req); //Validating account number
-  
+  await body("accountNumber")
+    .isNumeric()
+    .isLength({ min: 10, max: 12 })
+    .withMessage("Account number must be 10 to 12 digits")
+    .run(req); //Validating account number
+
   //Ensuring password is 8 characters, includes 1 special character, 1 capital letter and 1 number
-  await body("password").isLength({ min: 8 }).withMessage("Password must be atleast 8 characters").matches(/\d/).withMessage("Password must contain 1 number").matches(/[A-Z]/).withMessage("Password must contain 1 Uppercase character").matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage("Password must contain 1 special character").run(req); 
+  await body("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be atleast 8 characters")
+    .matches(/\d/)
+    .withMessage("Password must contain 1 number")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain 1 Uppercase character")
+    .matches(/[!@#$%^&*(),.?":{}|<>]/)
+    .withMessage("Password must contain 1 special character")
+    .run(req);
 
   //Checking for validation errors
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() });
 
   //Getting the fields from the form
   const { accountNumber, password } = req.body;
-  
+
   //Trying to find the corrosponding user to the account number
   try {
     const customer = await Customer.findOne({ accountNumber });
-    
+
     //If account number is not found then error message
-    if (!customer) return res.status(401).json({ error: "Account number incorrect or user does not exist" });
-    
+    if (!customer)
+      return res
+        .status(401)
+        .json({ error: "Account number incorrect or user does not exist" });
+
     //If there is a user with account number, then checking if passwords match
     const valid = await bcrypt.compare(password, customer.passwordHash);
-    
+
     //If passwords don't match, error message sent
     if (!valid) return res.status(401).json({ error: "Incorrect password" });
 
     //Creating a jwt token to keep the user logged in
     const token = jwt.sign(
-      { id: customer._id, fullName: customer.fullName, accountNumber : customer.accountNumber},
+      {
+        id: customer._id,
+        fullName: customer.fullName,
+        accountNumber: customer.accountNumber,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "15m" } //jwt token only lasts for 15 minutes
     );
@@ -53,13 +75,14 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 15 * 60 * 1000, 
+      maxAge: 15 * 60 * 1000,
     });
 
     //Success response
-    res.json({ user: { id: customer._id, fullName: customer.fullName, accountNumber } });
+    res.json({
+      user: { id: customer._id, fullName: customer.fullName, accountNumber },
+    });
   } catch (err) {
-    
     //Error response if errors occur
     res.status(500).json({ error: "Server error: " + err.message });
   }
@@ -67,34 +90,52 @@ export const login = async (req, res) => {
 
 //Method allowing the employee to login
 export const loginEmployee = async (req, res) => {
-  await body("employeeNumber").matches(/^EMP\d{4}$/).withMessage("Employee number must start with EMP with 4 digits afterwards").run(req); //Validating employee number
-  
+  await body("employeeNumber")
+    .matches(/^EMP\d{4}$/)
+    .withMessage("Employee number must start with EMP with 4 digits afterwards")
+    .run(req); //Validating employee number
+
   //Ensuring password is 8 characters, includes 1 special character, 1 capital letter and 1 number
-  await body("password").isLength({ min: 8 }).withMessage("Password must be atleast 8 characters").matches(/\d/).withMessage("Password must contain 1 number").matches(/[A-Z]/).withMessage("Password must contain 1 Uppercase character").matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage("Password must contain 1 special character").run(req); 
+  await body("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be atleast 8 characters")
+    .matches(/\d/)
+    .withMessage("Password must contain 1 number")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain 1 Uppercase character")
+    .matches(/[!@#$%^&*(),.?":{}|<>]/)
+    .withMessage("Password must contain 1 special character")
+    .run(req);
 
   //Checking for validation errors
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() });
 
   //Getting the fields from the form
   const { employeeNumber, password } = req.body;
-  
+
   //Trying to find the corrosponding employee to the employee number
   try {
     const employee = await Employee.findOne({ employeeNumber });
-    
+
     //If employee number is not found then error message
-    if (!employee) return res.status(401).json({ error: "Invalid employee number format or employee does not exist" });
-    
+    if (!employee)
+      return res
+        .status(401)
+        .json({
+          error: "Invalid employee number format or employee does not exist",
+        });
+
     //If there is a employee with that employee number, then checking if passwords match
     const valid = await bcrypt.compare(password, employee.passwordHash);
-    
+
     //If passwords don't match, error message sent
     if (!valid) return res.status(401).json({ error: "Incorrect password" });
 
     //Creating a jwt token to keep the user logged in
     const token = jwt.sign(
-      { id: employee._id, fullName: employee.fullName, employeeNumber},
+      { id: employee._id, fullName: employee.fullName, employeeNumber },
       process.env.JWT_SECRET,
       { expiresIn: "15m" } //jwt token only lasts for 15 minutes
     );
@@ -103,15 +144,15 @@ export const loginEmployee = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 15 * 60 * 1000, 
+      maxAge: 15 * 60 * 1000,
     });
 
     //Success response
-    res.json({ 
+    res.json({
       token,
-      user: { id: employee._id, fullName: employee.fullName, employeeNumber} });
+      user: { id: employee._id, fullName: employee.fullName, employeeNumber },
+    });
   } catch (err) {
-    
     //Error response if errors occur
     res.status(500).json({ error: "Server error: " + err.message });
   }
