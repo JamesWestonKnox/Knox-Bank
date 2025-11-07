@@ -31,10 +31,18 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 
 // Key and certificate for HTTPS server
-const options = {
-  key: fs.readFileSync("keys/privatekey.pem"),
-  cert: fs.readFileSync("keys/certificate.pem"),
-};
+let options;
+if (process.env.CI) {
+  options = {
+    key: Buffer.from(process.env.PRIVATE_KEY_B64, "base64"),
+    cert: Buffer.from(process.env.CERTIFICATE_B64, "base64"),
+  };
+} else {
+  options = {
+    key: fs.readFileSync("keys/privatekey.pem"),
+    cert: fs.readFileSync("keys/certificate.pem"),
+  };
+}
 
 // Helmet used for HTTP security headers
 app.use(helmet());
