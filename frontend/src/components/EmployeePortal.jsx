@@ -10,6 +10,7 @@ export default function EmployeePortal() {
   const [employee, setEmployee] = useState(null);
   const token = localStorage.getItem("token");
   
+  //Retrieving all transactions from backend
   const fetchTransactions = async () =>{
     try{
       const res = await getAllTransactions(token);
@@ -23,7 +24,6 @@ export default function EmployeePortal() {
 
   useEffect(() => {
     fetchTransactions();
-
     const employeeData = JSON.parse(localStorage.getItem("employee"));
     if (employeeData){
       setEmployee(employeeData);
@@ -31,6 +31,7 @@ export default function EmployeePortal() {
   }, [token]
   );
 
+  //Verify single transaction
   const handleVerify = async (id) => {
     try{
       const res = await verifyTransaction(id, token);
@@ -43,6 +44,7 @@ export default function EmployeePortal() {
 
   };
 
+  //Function to submit all transactions to swift
   const handleSubmitToSwift = async () => {
     try{
       const res = await submitToSwift(token);
