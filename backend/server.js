@@ -54,10 +54,16 @@ app.use("/api/customer", customerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
 
-// Create HTTPS server with SSL keys
-let server = https.createServer(options, app);
+const USE_HTTPS = process.env.CI !== "true";
 
-// Start server
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+if (USE_HTTPS) {
+  const server = https.createServer(options, app);
+  server.listen(PORT, () =>
+    console.log(`HTTPS server running on port ${PORT}`)
+  );
+} else {
+  app.listen(PORT, () =>
+    console.log(`HTTP server running on port ${PORT} (CI)`)
+  );
+}
 // =============================== END OF FILE ===============================
