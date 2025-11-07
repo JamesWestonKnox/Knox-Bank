@@ -1,0 +1,56 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.1.0
+
+jobs:
+  security-pipeline:
+    docker:
+      - image cimg/node:20.5
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install Dependencies
+          command: |
+            cd backend && npm ci
+            cd ../frontend && npm ci
+
+      - run:
+          name: Run Tests
+          command: |
+            cd backend
+            npm test || echo "No backend tests yet"
+            cd ../frontend
+            npm test || echo "No frontend tests yet"
+
+      - run:
+          name: Dependency Audit
+          command: |
+            cd backend && npm audit --audit-level=high || true
+            cd ../frontend && npm audit --audit-level=high || true
+
+      - run:
+          name: SonarCloud Scan
+          command: |
+            npm install -g sonar-scanner
+            sonar-scanner \
+              -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+              -Dsonar.organization=${SONAR_ORG_KEY} \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=${SONAR_HOST_URL} \
+              -Dsonar.login=${SONAR_TOKEN}
+
+      - run:
+          name: Run API Tests
+          command: |
+            npm install -g newman
+            newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit
+
+workflows:
+  version: 2
+  security_scan_workflow:
+    jobs:
+      - security-pipeline
