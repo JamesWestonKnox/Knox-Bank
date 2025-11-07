@@ -30,20 +30,6 @@ connectDB();
 const PORT = process.env.PORT || 4000;
 const app = express();
 
-// Key and certificate for HTTPS server
-let options;
-if (process.env.CI) {
-  options = {
-    key: Buffer.from(process.env.PRIVATE_KEY_B64, "base64"),
-    cert: Buffer.from(process.env.CERTIFICATE_B64, "base64"),
-  };
-} else {
-  options = {
-    key: fs.readFileSync("keys/privatekey.pem"),
-    cert: fs.readFileSync("keys/certificate.pem"),
-  };
-}
-
 // Helmet used for HTTP security headers
 app.use(helmet());
 
@@ -62,12 +48,25 @@ app.use("/api/customer", customerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
 
-// Create HTTPS server with SSL keys
-let server = https.createServer(options, app);
+app.get("/health", (req, res) => res.status(200).send("OK"));
 
-// Start server
-server.listen(PORT, "0.0.0.0", () =>
-  console.log(`Server running on port ${PORT}`)
-);
+let server;
+if (process.env.CI) {
+  // CI uses HTTP
+  server = http.createServer(app);
+  server.listen(PORT, "0.0.0.0", () =>
+    console.log(`CI server running on HTTP port ${PORT}`)
+  );
+} else {
+  // Local/dev/prod HTTPS
+  const options = {
+    key: fs.readFileSync("keys/privatekey.pem"),
+    cert: fs.readFileSync("keys/certificate.pem"),
+  };
+  server = https.createServer(options, app);
+  server.listen(PORT, "0.0.0.0", () =>
+    console.log(`Server running on HTTPS port ${PORT}`)
+  );
+}
 
 // =============================== END OF FILE ===============================
