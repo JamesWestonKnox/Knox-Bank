@@ -33,12 +33,11 @@ jobs:
             cd ../frontend && npm audit --audit-level=high || true
 
       - run:
-          name: Install SonarScanner CLI
+          name: SonarCloud Scan
           command: |
-            curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.9.3.73484-linux.zip
-            unzip sonar-scanner.zip -d .
-            chmod +x sonar-scanner-4.9.3.73484-linux/bin/sonar-scanner
-            ./sonar-scanner-4.9.3.73484-linux/bin/sonar-scanner \
+            cd backend
+            npm install --save-dev sonar-scanner
+            npx sonar-scanner \
               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
               -Dsonar.organization=${SONAR_ORG_KEY} \
               -Dsonar.sources=. \
