@@ -10,15 +10,18 @@
 
 import express from "express";
 import { login, loginEmployee } from "../controllers/authController.js";
-import ExpressBrute from "express-brute";
+import rateLimit from "express-rate-limit";
 
 const router = express.Router();
 
-var store = new ExpressBrute.MemoryStore();
-var bruteforce = new ExpressBrute(store);
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: "Too many login attempts from this IP, please try again later",
+});
 
-router.post("/login", bruteforce.prevent, login);
-router.post("/loginEmployee", bruteforce.prevent, loginEmployee);
+router.post("/login", loginLimiter, login);
+router.post("/loginEmployee", loginLimiter, loginEmployee);
 
 router.get("/", (req, res) => {
   res.send("Auth route working!");
