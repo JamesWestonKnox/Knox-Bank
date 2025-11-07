@@ -30,22 +30,11 @@ connectDB();
 const PORT = process.env.PORT || 4000;
 const app = express();
 
-const USE_HTTPS = process.env.CI !== "true";
-
-if (USE_HTTPS) {
-  const options = {
-    key: fs.readFileSync("keys/privatekey.pem"),
-    cert: fs.readFileSync("keys/certificate.pem"),
-  };
-  const server = https.createServer(options, app);
-  server.listen(PORT, () =>
-    console.log(`HTTPS server running on port ${PORT}`)
-  );
-} else {
-  app.listen(PORT, () =>
-    console.log(`HTTP server running on port ${PORT} (CI)`)
-  );
-}
+// Key and certificate for HTTPS server
+const options = {
+  key: fs.readFileSync("keys/privatekey.pem"),
+  cert: fs.readFileSync("keys/certificate.pem"),
+};
 
 // Helmet used for HTTP security headers
 app.use(helmet());
@@ -55,12 +44,7 @@ app.use(express.json());
 
 // Parsing cookies
 app.use(cookieParser());
-
-if (process.env.CI === "true") {
-  app.use(cors({ origin: true, credentials: true }));
-} else {
-  app.use(cors({ origin: "https://localhost:5173", credentials: true }));
-}
+app.use(cors({ origin: "https://localhost:5173", credentials: true }));
 
 // Rate limiting
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
@@ -69,5 +53,11 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use("/api/customer", customerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/transaction", transactionRoutes);
+
+// Create HTTPS server with SSL keys
+let server = https.createServer(options, app);
+
+// Start server
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // =============================== END OF FILE ===============================

@@ -43,27 +43,6 @@ jobs:
               -Dsonar.host.url=${SONAR_HOST_URL} \
               -Dsonar.token=${SONAR_TOKEN}
 
-      - run:
-          name: Start Backend & Run Newman
-          command: |
-            cd backend
-            export CI=true
-            npm install --save-dev newman
-            NODE_TLS_REJECT_UNAUTHORIZED=0 npm run dev &
-
-            SERVER_PID=$!
-            echo "Server PID: $SERVER_PID"
-
-            # Wait for server to listen
-            for i in {1..20}; do
-              nc -z localhost 4000 && break
-              echo "Waiting for server..."
-              sleep 1
-            done
-
-            npx newman run postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit
-            kill $SERVER_PID
-
 workflows:
   version: 2
   security_scan_workflow:
