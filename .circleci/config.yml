@@ -50,15 +50,16 @@ jobs:
             cd backend
             export CI=true
             npm install --save-dev newman
-            # Start server in background using HTTP for CI
             NODE_TLS_REJECT_UNAUTHORIZED=0 npm run dev &> server.log &
             SERVER_PID=$!
             echo "Server PID: $SERVER_PID"
             echo "Waiting 10 seconds for server to start..."
             sleep 10
-            # Set baseUrl variable for Newman dynamically
-            npx newman run ../postman/KnoxBank_API_Tests.postman_collection.json \
-              --env-var "CI=true" \
-              --reporters cli,junit
-            # Kill server after tests
+            npx newman run ../postman/KnoxBank_API_Tests.postman_collection.json --reporters cli,junit
             kill $SERVER_PID
+
+workflows:
+  version: 2
+  security_scan_workflow:
+    jobs:
+      - security-pipeline
