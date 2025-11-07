@@ -15,8 +15,8 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            cd backend && npm ci
-            cd ../frontend && npm ci
+            cd backend && npm ci --legacy-peer-deps
+            cd ../frontend && npm ci --legacy-peer-deps
 
       - run:
           name: Run Tests
